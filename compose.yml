@@ -38,14 +38,10 @@ services:
             # - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
-        command: webserver
+        command: airflow initdb && airflow webserver -D
         networks:
-          - postgres-net
-        healthcheck:
-            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
-            interval: 30s
-            timeout: 30s
-            retries: 3
+            - postgres-net
+            - redis-net
 
     flower:
         image: puckel/docker-airflow:1.10.9
